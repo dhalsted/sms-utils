@@ -11,7 +11,7 @@ class SMSValidator{
 	 * Without Twilio credentials you can't verify mobile
 	*/
 
-	public function __construct($twilio_sid, $twilio_token){
+	public function __construct($twilio_sid = '', $twilio_token = ''){
 		$this->twilio_sid = $twilio_sid;
 		$this->twilio_token = $twilio_token;
 	}
