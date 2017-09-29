@@ -14,30 +14,30 @@ class SMSWithEnvTest extends \PHPUnit_Framework_TestCase
 	protected $valid_mobile_number;
 	protected $valid_mobile_country_code;
 
-	// get Twilio credentials from .env
-	protected function setUp(){
+	public static function setUpBeforeClass(){
+		if (!is_readable(__DIR__."/../.env") || !is_file(__DIR__."/../.env")) {
+           	die("Error!  the .env file cannot be located.  Do you need to copy .env.example to .env?\n");
+        }
 
-		try {
-			$dotenv = new \Dotenv\Dotenv(__DIR__."/../");
-			$dotenv->load();	
-		} catch (Exception $e){
-			die("These tests can only be performed after the .env configuration file is set up.\n");
-		}
+		$dotenv = new \Dotenv\Dotenv(__DIR__."/../");
+		$dotenv->load();
+
+	}
+
+	// check that calling the validator with incorrect Twilio credentials returns an error
+	public function testBadTwilioCredentials(){
 
 		
+
 
 		getenv('TWILIO_SID') === null ? $this->twilio_sid = '' : $this->twilio_sid = getenv('TWILIO_SID');
 		getenv('TWILIO_TOKEN') === null ? $this->twilio_token = '' : $this->twilio_token = getenv('TWILIO_TOKEN');
 		getenv('VALID_LANDLINE_NUMBER') === null ? $this->valid_landline_number = '' :  $this->valid_landline_number = getenv('VALID_LANDLINE_NUMBER');
 		getenv('VALID_LANDLINE_COUNTRY_CODE') === null ? $this->valid_landline_country_code = 'US' : $this->valid_landline_country_code = getenv('VALID_LANDLINE_COUNTRY_CODE');
 		getenv('VALID_MOBILE_NUMBER') === null ? $this->valid_mobile_number = '' : $this->valid_mobile_number = getenv('VALID_MOBILE_NUMBER');
-		getenv('VALID_MOBILE_COUNTRY_CODE') === null ?  $this->valid_mobile_country_code = '' : $this->valid_mobile_country_code = getenv('VALID_MOBILE_COUNTRY_CODE');
-	}
+		getenv('VALID_MOBILE_COUNTRY_CODE') === null ?  $this->valid_mobile_country_code = '' : $this->valid_mobile_country_code = getenv('VALID_MOBILE_COUNTRY_CODE');	
 
-	
 
-	// check that calling the validator with incorrect Twilio credentials returns an error
-	public function testBadTwilioCredentials(){
 		if ( $this->valid_mobile_number == '' || $this->valid_mobile_country_code == '' ||  $this->twilio_sid == '' || $this->twilio_token == ''){
 			$this->markTestSkipped("This test can only be performed if TWILIO_SID, TWILIO_TOKEN, VALID_MOBILE_NUMBER and VALID_MOBILE_COUNTRY_CODE have been set");
 		} else {
@@ -50,6 +50,18 @@ class SMSWithEnvTest extends \PHPUnit_Framework_TestCase
 	// check that calling the validator with correct Twilio credentials 
 	// but a land line number returns an SMSNotMobileException
 	public function testLandline(){
+
+		$dotenv = new \Dotenv\Dotenv(__DIR__."/../");
+		$dotenv->load();		
+
+		getenv('TWILIO_SID') === null ? $this->twilio_sid = '' : $this->twilio_sid = getenv('TWILIO_SID');
+		getenv('TWILIO_TOKEN') === null ? $this->twilio_token = '' : $this->twilio_token = getenv('TWILIO_TOKEN');
+		getenv('VALID_LANDLINE_NUMBER') === null ? $this->valid_landline_number = '' :  $this->valid_landline_number = getenv('VALID_LANDLINE_NUMBER');
+		getenv('VALID_LANDLINE_COUNTRY_CODE') === null ? $this->valid_landline_country_code = 'US' : $this->valid_landline_country_code = getenv('VALID_LANDLINE_COUNTRY_CODE');
+		getenv('VALID_MOBILE_NUMBER') === null ? $this->valid_mobile_number = '' : $this->valid_mobile_number = getenv('VALID_MOBILE_NUMBER');
+		getenv('VALID_MOBILE_COUNTRY_CODE') === null ?  $this->valid_mobile_country_code = '' : $this->valid_mobile_country_code = getenv('VALID_MOBILE_COUNTRY_CODE');
+
+
 		if ( $this->valid_landline_number == '' || $this->valid_landline_country_code == '' ||$this->twilio_sid == '' || $this->twilio_token == ''){
 			$this->markTestSkipped("This test can only be performed if TWILIO_SID, TWILIO_TOKEN, VALID_LANDLINE_NUMBER and VALID_LANDLINE_COUNTRY_CODE have been set");
 		} else {
@@ -62,6 +74,19 @@ class SMSWithEnvTest extends \PHPUnit_Framework_TestCase
 	// check that calling the validator with correct Twilio credentials 
 	// and a valid mobile number returns the number in E164 format
 	public function testMobileNumber(){
+
+		$dotenv = new \Dotenv\Dotenv(__DIR__."/../");
+		$dotenv->load();		
+
+		getenv('TWILIO_SID') === null ? $this->twilio_sid = '' : $this->twilio_sid = getenv('TWILIO_SID');
+		getenv('TWILIO_TOKEN') === null ? $this->twilio_token = '' : $this->twilio_token = getenv('TWILIO_TOKEN');
+		getenv('VALID_LANDLINE_NUMBER') === null ? $this->valid_landline_number = '' :  $this->valid_landline_number = getenv('VALID_LANDLINE_NUMBER');
+		getenv('VALID_LANDLINE_COUNTRY_CODE') === null ? $this->valid_landline_country_code = 'US' : $this->valid_landline_country_code = getenv('VALID_LANDLINE_COUNTRY_CODE');
+		getenv('VALID_MOBILE_NUMBER') === null ? $this->valid_mobile_number = '' : $this->valid_mobile_number = getenv('VALID_MOBILE_NUMBER');
+		getenv('VALID_MOBILE_COUNTRY_CODE') === null ?  $this->valid_mobile_country_code = '' : $this->valid_mobile_country_code = getenv('VALID_MOBILE_COUNTRY_CODE');
+
+
+
 		if ( $this->valid_mobile_number == '' || $this->valid_mobile_country_code == '' ||  $this->twilio_sid == '' || $this->twilio_token == ''){
 			$this->markTestSkipped("This test can only be performed if TWILIO_SID, TWILIO_TOKEN, VALID_MOBILE_NUMBER and VALID_MOBILE_COUNTRY_CODE have been set");
 		} else {
