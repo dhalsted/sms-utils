@@ -1,5 +1,5 @@
 {
-    "name": "dhalsted/sms_utils",
+    "name": "dhalsted/sms-utils",
     "description": "Validate SMS numbers using libphonenumber and Twilio",
     "keywords": [
         "Twilio","libphonenumber","composer", "php"
