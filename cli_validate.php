@@ -6,8 +6,8 @@
 require __DIR__ . '/vendor/autoload.php';
 
 if (count($argv) < 2){
-	echo ("Usage: index.php [phone number] [country_code]\n");
-	echo ("eg index.php '(773) 555-1212' or index.php '(773) 555-1212' US\n");
+	echo ("Usage: cli_validate.php [phone number] [country_code]\n");
+	echo ("eg cli_validate.php '(773) 555-1212' or cli_validate.php '(773) 555-1212' US\n");
 	die( ('Country code defaults to US\n'));
 }
 
