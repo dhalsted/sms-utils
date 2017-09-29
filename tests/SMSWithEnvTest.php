@@ -2,7 +2,9 @@
 
 namespace UnitTests;
 
-class SMSTest extends \PHPUnit_Framework_TestCase
+// these tests check for functionality that depends on a valid .env config file
+
+class SMSWithEnvTest extends \PHPUnit_Framework_TestCase
 {
 
 	protected $twilio_sid;
@@ -14,8 +16,15 @@ class SMSTest extends \PHPUnit_Framework_TestCase
 
 	// get Twilio credentials from .env
 	protected function setUp(){
-		$dotenv = new \Dotenv\Dotenv(__DIR__."/../");
-		$dotenv->load();
+
+		try {
+			$dotenv = new \Dotenv\Dotenv(__DIR__."/../");
+			$dotenv->load();	
+		} catch (Exception $e){
+			die("These tests can only be performed after the .env configuration file is set up.\n");
+		}
+
+		
 
 		getenv('TWILIO_SID') === null ? $this->twilio_sid = '' : $this->twilio_sid = getenv('TWILIO_SID');
 		getenv('TWILIO_TOKEN') === null ? $this->twilio_token = '' : $this->twilio_token = getenv('TWILIO_TOKEN');
@@ -25,29 +34,7 @@ class SMSTest extends \PHPUnit_Framework_TestCase
 		getenv('VALID_MOBILE_COUNTRY_CODE') === null ?  $this->valid_mobile_country_code = '' : $this->valid_mobile_country_code = getenv('VALID_MOBILE_COUNTRY_CODE');
 	}
 
-	// check that an invalid region or country code returns an error
-	public function testCheckInvalidRegion(){
-		$this->setExpectedException(\libphonenumber\NumberParseException::class);
-		$sv = new \Dhalsted\SMS\SMSValidator();
-		$sv->validatePhoneNumber("773 555 1212", "xx");
-
-	}
-
-	// check that a truly invalid phone number returns an error
-	public function testCheckInvalidNumber(){
-		$this->setExpectedException(\Dhalsted\SMSExceptions\SMSBadNumberException::class);
-		$sv = new \Dhalsted\SMS\SMSValidator();
-		$sv->validatePhoneNumber("phone 773 555", "US");
-
-	}
-
-	// check that a phone number from a non-existent area code returns an error
-	public function testCheckInvalidAreaCode(){
-		$this->setExpectedException(\Dhalsted\SMSExceptions\SMSBadNumberException::class);
-		$sv = new \Dhalsted\SMS\SMSValidator();
-		$sv->validatePhoneNumber("(123) 444-3333", "US");
-
-	}
+	
 
 	// check that calling the validator with incorrect Twilio credentials returns an error
 	public function testBadTwilioCredentials(){
