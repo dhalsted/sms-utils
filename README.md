@@ -38,7 +38,7 @@ Then try it with a mobile number.  In this case, you'll get back
 ```
 To call the SMSValidator class in your own code, just do
 ```
-$sv = new \Dhalsted\SMS\SMSValidator([TWILIO_SID, TWILIO_TOKEN);
+$sv = new \Dhalsted\SMS\SMSValidator(TWILIO_SID, TWILIO_TOKEN);
 $validated_number = $sv->validateMobileNumber($phone_number, $country_code);
 ```
 SMSValidator throws several kinds of exceptions which can help your users understand why a number will not work for texts.
