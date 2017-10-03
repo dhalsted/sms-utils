@@ -77,8 +77,8 @@ class SMSValidator{
 			        array("type" => "carrier")
 			    );
 
-			if ($number->carrier["type"] !== 'mobile'){ // is it mobile?
-				throw new \Dhalsted\SMSExceptions\SMSNotMobileException("Number does not appear to be a mobile number", 102);
+			if ($number->carrier["type"] !== 'mobile' && $number->carrier["type"] !== 'voip' ){ // is it mobile or voip?
+				throw new \Dhalsted\SMSExceptions\SMSNotMobileException("Number does not appear to be a mobile or voip number", 102);
 			}
 			
 		// a number of exception types can be thrown.
