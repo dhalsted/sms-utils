@@ -43,7 +43,7 @@ To call the SMSValidator class in your own code, just do
 $sv = new \Dhalsted\SMS\SMSValidator(TWILIO_SID, TWILIO_TOKEN);
 $validated_number = $sv->validateMobileNumber($phone_number, $country_code);
 ```
-By default, the Validator checks whether the submitted phone number is a mobile or VOIP number.  If you want to check specifically for one or the other, do something like this:
+By default, the Validator checks whether the submitted phone number is a mobile or VoIP number.  If you want to check specifically for one or the other, do something like this:
 ```
 $validated_number = $sv->validateMobileNumber($phone_number, $country_code, array('mobile'));
 ```
@@ -54,6 +54,6 @@ SMSValidator throws several kinds of exceptions which can help your users unders
 
 * SMSBadNumberException (code 20101) occurs if the data submitted for a phone number can't be parsed or is incomplete.  Submitting a non-existent country or region code, a string that cannot be parsed ("phone number 888 555 1212" instead of "888 555 1212"), or a truncated number will raise this exception.
 
-* SMSNotMobileException (code 20102) occurs if a number is submitted that is not a valid type, by default either mobile or VOIP.
+* SMSNotMobileException (code 20102) occurs if a number is submitted that is not a valid type, by default either mobile or VoIP.
 
 
