@@ -2,9 +2,9 @@
 
 namespace Dhalsted\SMSExceptions;
 
-class SMSNotMobileException extends \Exception {
+class SMSTwilioMisconfigException extends \Exception {
 	
-    public function __construct($message = "Number does not appear to be of a valid type", $code = 20102, Exception $previous = null) {
+    public function __construct($message = "There is a problem with your Twilio credentials", $code = 20100, Exception $previous = null) {
         parent::__construct($message, $code, $previous);
     }
 

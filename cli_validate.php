@@ -29,6 +29,10 @@ try {
 		$validated_number = $sv->validateMobileNumber($phone_number, $country_code);
 	}
 
+	// by default mobile and voip numbers will count as valid.  If you want to specify
+	// one or the other, do something like this:
+	// $validated_number = $sv->validateMobileNumber($phone_number, $country_code, array('mobile'));
+
 	echo $validated_number."\n";
 
 } 
@@ -36,31 +40,20 @@ try {
 // you might want to provide different feedback depending on 
 // the error state
 
-// libphone number can't parse the submitted number
+// you tried to call the Validator with missing or invalid 
+// Twilio credentials.  Check .env?
+catch (\Dhalsted\SMSExceptions\SMSTwilioMisconfigException $e){
+	echo $e->__toString();
+}
 
-catch (\libphonenumber\NumberParseException $e){
-	echo "Number parse exception: ". $e->getMessage() . "\n";
-} 
-
-// the submitted number is invalid--not enough digits, for example
+// the submitted number is invalid--can't be parsed, not enough digits, invalid region code
 catch (\Dhalsted\SMSExceptions\SMSBadNumberException $e){
-	echo "Bad number exception: ". $e->getMessage() . "\n";
+	echo $e->__toString();
 }
 
 // the submitted number is not a mobile number
 catch (\Dhalsted\SMSExceptions\SMSNotMobileException $e){
-	echo "Not mobile exception: ". $e->getMessage() . "\n";
-}
- 
-// you tried to call Twilio without credentials --something is probably misconfigured
-catch (\Twilio\Exceptions\ConfigurationException $e){
-	echo "Twilio configuration exception: ". $e->getMessage() . "\n";
-}
-
-// you tried to call Twilio's REST interface and got a 401 (access denied),
-// so you need to double-check your Twilio credentials
-catch (\Twilio\Exceptions\RestException $e){
-	echo "Twilio rest exception: Status code". $e->getStatusCode().", message ". $e->getMessage() . "\n";
+	echo $e->__toString();
 }
 
 // something else happened

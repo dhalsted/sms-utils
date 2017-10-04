@@ -40,11 +40,11 @@ class SMSValidator{
 		try {
 			$proto = $phoneUtil->parse($phone_number, strtoupper($country_code));
 			if (!$phoneUtil->isValidNumber($proto)){
-		    	throw new \Dhalsted\SMSExceptions\SMSBadNumberException("Number invalid", 101);
+		    	throw new \Dhalsted\SMSExceptions\SMSBadNumberException();
 		    }
 
 		} catch (\libphonenumber\NumberParseException $e) {
-			throw $e;
+			throw new \Dhalsted\SMSExceptions\SMSBadNumberException();
 		}
 
 		return $phoneUtil->format($proto, \libphonenumber\PhoneNumberFormat::E164);
@@ -65,7 +65,7 @@ class SMSValidator{
 	 *
      */
 
-	public function validateMobileNumber($sms_number, $country_code = "US"){
+	public function validateMobileNumber($sms_number, $country_code = "US", $types = array("mobile", "voip")){
 
 		try {
 
@@ -77,19 +77,26 @@ class SMSValidator{
 			        array("type" => "carrier")
 			    );
 
-			if ($number->carrier["type"] !== 'mobile' && $number->carrier["type"] !== 'voip' ){ // is it mobile or voip?
-				throw new \Dhalsted\SMSExceptions\SMSNotMobileException("Number does not appear to be a mobile or voip number", 102);
+			$valid_type = false;
+			foreach ($types as $type){
+				if ($number->carrier["type"] == strtolower($type)){
+					$valid_type = true;
+				}
+			}
+
+			if (!$valid_type){
+				throw new \Dhalsted\SMSExceptions\SMSNotMobileException(); // number was not one of the types requested for validation
 			}
 			
 		// a number of exception types can be thrown.
 		} catch (\libphonenumber\NumberParseException $e) { // libphonenumber can't parse this
-			throw $e;
-		} catch (\Dhalsted\SMSExceptions\SMSBadNumberException $e){ // submitted number was bad or not mobile
-			throw $e;
+			throw new \Dhalsted\SMSExceptions\SMSBadNumberException();
+		} catch (\Dhalsted\SMSExceptions\SMSBadNumberException $e){ // submitted number was bad -- could be parsed, but not valid
+			throw new \Dhalsted\SMSExceptions\SMSBadNumberException();
 		} catch (\Twilio\Exceptions\ConfigurationException $e){ // credentials for Twilio incomplete or missing
-			throw $e;
+			throw new \Dhalsted\SMSExceptions\SMSTwilioMisconfigException();
 		} catch (\Twilio\Exceptions\RestException $e) { // credentials supplied for Twilio are not valid
-			throw $e;
+			throw new \Dhalsted\SMSExceptions\SMSTwilioMisconfigException();
 		}
 		catch (\Exception $e){  // something else went wrong
 			throw $e;
