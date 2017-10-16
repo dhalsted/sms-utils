@@ -23,7 +23,7 @@
     "autoload": {
         "psr-4": {
             "Dhalsted\\SMS\\": "src/SMS",
-            "Dhalsted\\SMSExceptions\\": "src/SMSexceptions"
+            "Dhalsted\\SMSExceptions\\": "src/SMSExceptions"
         }
     },
     "autoload-dev": {
